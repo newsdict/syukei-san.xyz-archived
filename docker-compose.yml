@@ -1,0 +1,23 @@
+version: "3"
+networks:
+  app-tier:
+    driver: bridge
+services:
+  nodejs-server:
+    tty: true
+    stdin_open: true
+    container_name: syukei-san
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    - ./:/var/www/docker
+    working_dir: /var/www/docker
+    command: >
+      bash -c ". /root/.nvm/nvm.sh
+      && npm install
+      && npm run nodemon"
+    ports:
+      - 3000:3000
+    networks:
+      - app-tier

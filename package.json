@@ -1,0 +1,38 @@
+{
+  "name": "syukei-san",
+  "version": "0.0.1",
+  "description": "Easy aggregation of data",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "nodemon": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newsdict/syukei-san.xyz.git"
+  },
+  "keywords": [
+    "web",
+    "aggregate",
+    "data"
+  ],
+  "author": "yusuke@newsdict.jp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/newsdict/syukei-san.xyz/issues"
+  },
+  "homepage": "https://github.com/newsdict/syukei-san.xyz#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ejs": "^2.6.2",
+    "cookie-parser": "^1.4.4",
+    "csurf": "^1.10.0",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "sha1": "^1.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
