@@ -55,12 +55,12 @@
                 <% for(key in data) { %>
                 <div class="control">
                     <div class="tags has-addons">
-                        <span class="tag is-light"><%= key %></span>
-                        <span class="tag is-dark"><%= data[key] %>票</span>
+                        <span class="tag is-light"><%= data[key]['key'] %></span>
+                        <span class="tag is-dark"><%= data[key]['count'] %>票</span>
                     </div>
                 </div>
                 <div class="card-content">
-                    <progress class="progress is-dark" value="<%= data[key] * 10 %>" max="100"></progress>
+                    <progress class="progress is-dark" value="<%= data[key]['count'] * 10 %>" max="100"></progress>
                 </div>
                 <% } %>
             </div>

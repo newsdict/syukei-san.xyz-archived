@@ -1,21 +1,27 @@
+// 'use strict'
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const {check, validationResult} = require('express-validator');
 const fileSystem = require('fs');
 const crypto = require('crypto');
 const csrf = require('csurf');
 const app = express();
 const port = 3000;
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
 
 // setup route middlewares
 const csrfProtection = csrf({cookie: true});
 const parseForm = bodyParser.urlencoded({extended: false});
 
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 // parse cookies
 // we need this because "cookie" is true in csrfProtection
 app.use(cookieParser());
+
+const VoteData = require('./classess/vote_data.js');
 
 /**;
  * top page
@@ -31,7 +37,12 @@ app.get('/', csrfProtection, function (req, res) {
 /**;
  * Create syukei data
  */
-app.post('/create', parseForm, csrfProtection, function (req, res) {
+app.post('/create', [
+    check('name').isLength({min: 3})
+], parseForm, csrfProtection, (req, res) => {
+    // Finds the validation errors in this request
+    const errors = validationResult(req);
+
     // Generate file name;
     let hrTime = process.hrtime();
     // Not reuse digest
@@ -69,30 +80,30 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
 });
 
 /**;
- * Aggregate Results
+ * Aggregate Result data
  */
 app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
-    // Generate file path
-    let filePath = 'data/' + req.params.id.slice(0, 2) + '/' + req.params.id.slice(3, 5) + '/' + req.params.id;
-    // Voting data
-    const form = JSON.parse(fileSystem.readFileSync(filePath, {encoding: "utf-8"}));
-    if (!form.result) {
-        form.result = {};
-    }
-    if (form.result[req.body.key]) {
-        form.result[req.body.key]++
-    } else {
-        form.result[req.body.key] = 1
-    }
-    // Write result
-    fileSystem.writeFileSync(filePath, JSON.stringify(form), function (err) {
-        if (err) {
-            throw err;
-        }
-    });
+    let votingData = new VoteData(req.params.id);
+    let data = votingData.data();
+    // vote {req.body.key}
+    votingData.vote(req.body.key)
     res.render('result', {
-        data: form.result,
-        name: form.name,
+        data: votingData.sortData(),
+        name: votingData.name(),
+        title: '集計結果 - 集計さん',
+        description: ''
+    });
+});
+
+/**
+ * View result data
+ */
+app.get('/result/:id/', function (req, res) {
+    let votingData = new VoteData(req.params.id);
+    let data = votingData.data();
+    res.render('result', {
+        data: votingData.sortData(),
+        name: votingData.name(),
         title: '集計結果 - 集計さん',
         description: ''
     });
@@ -101,7 +112,7 @@ app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
 /**;
  * Term
  */
-app.get('/term', parseForm, csrfProtection, function (req, res) {
+app.get('/term', function (req, res) {
     res.render('term', {title: '利用規約 - 集計さん', description: ''});
 });
 app.listen(port, () => console.log('listening on port 3000!'));
