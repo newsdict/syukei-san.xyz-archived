@@ -22,6 +22,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 const VoteData = require('./classess/vote_data.js');
+const TagHelper = require('./helpers/tag_helper.js');
 
 /**;
  * top page
@@ -91,7 +92,8 @@ app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
         data: votingData.sortData(),
         name: votingData.name(),
         title: '集計結果 - 集計さん',
-        description: ''
+        description: '',
+        TagHelper: new TagHelper()
     });
 });
 
@@ -105,7 +107,8 @@ app.get('/result/:id/', function (req, res) {
         data: votingData.sortData(),
         name: votingData.name(),
         title: '集計結果 - 集計さん',
-        description: ''
+        description: '',
+        TagHelper: new TagHelper()
     });
 });
 

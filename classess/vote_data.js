@@ -17,7 +17,6 @@ module.exports = class VoteData {
      * @return {Object}
      */
     sortData() {
-        console.log(this.voteData())
         return this.voteData().sort(function(a,b){
             if( a.count > b.count ) return -1;
             if( a.count < b.count ) return 1;
