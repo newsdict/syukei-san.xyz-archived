@@ -87,8 +87,10 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
     fileSystem.mkdirSync(dirPath, {recursive: true}, function (err) {
         // nothing
     });
-    // Remove white space
-    sanitizedData.data = sanitizedData.data.split(/\r?\n/).filter(v => v);
+    // Remove white space, Make data unique
+    sanitizedData.data = sanitizedData.data
+        .split(/\r?\n/).filter(v => v)
+        .filter((elem, index, self) => self.indexOf(elem) === index);
     // Write to file
     fileSystem.writeFileSync(dirPath + '/' + sha1Hash, JSON.stringify(sanitizedData), function (err) {
         if (err) {
