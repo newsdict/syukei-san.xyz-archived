@@ -2,12 +2,16 @@ const appRoot = require('app-root-path');
 const fileSystem = require('fs');
 const path = require('path');
 /**
- * constructor
- * @param {String} id
- * @returns void
- * @constructor
+ * VoteData Class
+ * @type {module.VoteData}
  */
 module.exports = class VoteData {
+    /**
+     * constructor
+     * @param {String} id
+     * @returns void
+     * @constructor
+     */
     constructor (id) {
         this._id = id;
     }

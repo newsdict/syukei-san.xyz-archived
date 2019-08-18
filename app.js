@@ -2,6 +2,8 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const valueScheme = require('value-schema');
 const cookieParser = require('cookie-parser');
 const {check, validationResult} = require('express-validator');
 const fileSystem = require('fs');
@@ -14,15 +16,30 @@ const port = 3000;
 const csrfProtection = csrf({cookie: true});
 const parseForm = bodyParser.urlencoded({extended: false});
 
+require('dotenv').config();
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+
+// Session
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 30 * 60 * 1000
+    }
+}));
 
 // parse cookies
 // we need this because "cookie" is true in csrfProtection
 app.use(cookieParser());
 
-const VoteData = require('./classess/vote_data.js');
-const TagHelper = require('./helpers/tag_helper.js');
+const createErrorMessage = require('./libs/create_error_message.js');
+const voteData = require('./libs/vote_data.js');
+const validationSchemes = require('./libs/shemes');
+const tagHelper = require('./helpers/tag_helper.js');
+const formHelper = require('./helpers/form_helper.js');
 
 /**;
  * top page
@@ -31,7 +48,8 @@ app.get('/', csrfProtection, function (req, res) {
     res.render('index', {
         title: '集計さん',
         description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるツールです。',
-        csrfToken: req.csrfToken()
+        csrfToken: req.csrfToken(),
+        formHelper: new formHelper(req)
     });
 });
 
@@ -43,7 +61,20 @@ app.post('/create', [
 ], parseForm, csrfProtection, (req, res) => {
     // Finds the validation errors in this request
     const errors = validationResult(req);
-
+    // Validation
+    let createErrorMessageInstance = new createErrorMessage('keyStack');
+    valueScheme.fit(req.body, validationSchemes.createVoteData, function (_error) {
+        createErrorMessageInstance.add(_error);
+    });
+    // Log error message to session
+    let errorMessages = createErrorMessageInstance.getMessages();
+    if (errorMessages) {
+        req.session.errorMessages = errorMessages;
+        req.session.form = req.body;
+        return res.redirect(req.baseUrl + '/');
+    } else {
+        req.session.destroy();
+    }
     // Generate file name;
     let hrTime = process.hrtime();
     // Not reuse digest
@@ -61,13 +92,14 @@ app.post('/create', [
             throw err;
         }
     });
-    res.redirect(req.baseUrl + '/form/' + sha1Hash + '/');
+    return res.redirect(req.baseUrl + '/form/' + sha1Hash + '/');
 });
 
 /**;
  * Voting Form
  */
 app.get('/form/:id/', csrfProtection, function (req, res) {
+    console.log(req.session.errorMessages);
     // Generate file path
     let filePath = 'data/' + req.params.id.slice(0, 2) + '/' + req.params.id.slice(3, 5) + '/' + req.params.id;
     // Voting data
@@ -84,16 +116,15 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
  * Aggregate Result data
  */
 app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
-    let votingData = new VoteData(req.params.id);
-    let data = votingData.data();
+    let voteDataInstance = new voteData(req.params.id);
     // vote {req.body.key}
-    votingData.vote(req.body.key)
+    voteDataInstance.vote(req.body.key)
     res.render('result', {
-        data: votingData.sortData(),
-        name: votingData.name(),
+        data: voteDataInstance.sortData(),
+        name: voteDataInstance.name(),
         title: '集計結果 - 集計さん',
         description: '',
-        TagHelper: new TagHelper()
+        tagHelper: new tagHelper()
     });
 });
 
@@ -101,14 +132,13 @@ app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
  * View result data
  */
 app.get('/result/:id/', function (req, res) {
-    let votingData = new VoteData(req.params.id);
-    let data = votingData.data();
+    let voteDataInstance = new voteData(req.params.id);
     res.render('result', {
-        data: votingData.sortData(),
-        name: votingData.name(),
+        data: voteDataInstance.sortData(),
+        name: voteDataInstance.name(),
         title: '集計結果 - 集計さん',
         description: '',
-        TagHelper: new TagHelper()
+        tagHelper: new tagHelper()
     });
 });
 

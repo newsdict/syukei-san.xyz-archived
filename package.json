@@ -33,7 +33,10 @@
     "sha1": "^1.1.1",
     "express-validator": "^6.1.1",
     "app-root-path": "^2.2.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "value-schema": "^2.1.0",
+    "express-session": "^1.16.2",
+    "dotenv": "^8.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

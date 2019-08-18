@@ -1,8 +1,3 @@
-/**
- * constructor
- * @returns void
- * @constructor
- */
 module.exports = class TagHelper {
     /**
      * color by vote's ranking

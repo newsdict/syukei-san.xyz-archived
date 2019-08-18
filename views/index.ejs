@@ -65,21 +65,30 @@
                     <div class="field">
                         <label class="label">タイトル</label>
                         <div class="control">
-                            <input class="input" type="text" name="name" placeholder="掃除当番の集計">
+                            <input class="input <%= formHelper.getErrorClass('name') %>" type="text" name="name" placeholder="掃除当番の集計" value="<%= formHelper.getValueInSession('name') %>">
+                            <% if (formHelper.isError('name')) { %>
+                            <p class="help is-danger">3文字以上にする必要があります</p>
+                            <% } %>
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">集計するデータ</label>
                         <div class="control">
-                            <textarea class="textarea" name="data" placeholder="1行ごとに入れてください"></textarea>
+                            <textarea class="textarea <%= formHelper.getErrorClass('data') %>" name="data" placeholder="1行ごとに入れてください"><%= formHelper.getValueInSession('data') %></textarea>
+                            <% if (formHelper.isError('data')) { %>
+                                <p class="help is-danger">2行以上にする必要があります</p>
+                            <% } %>
                         </div>
                     </div>
                     <div class="field">
                         <div class="control">
                             <label class="checkbox">
-                                <input type="checkbox" name="is_agreement">
-                                利用規約に同意します。 <a target="_blank" href="/term">利用規約</a>
+                                <input type="checkbox" name="is_agreement <%= formHelper.getErrorClass('is_agreement') %>">
+                                <a target="_blank" href="/term">利用規約</a>に同意します。
                             </label>
+                            <% if (formHelper.isError('is_agreement')) { %>
+                                <p class="help is-danger">利用規約にご同意していただく必要があります。※入力エラー時にはもう一度チェックしていただく必要があります。</p>
+                            <% } %>
                         </div>
                     </div>
                     <div class="field is-grouped">
