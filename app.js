@@ -72,7 +72,7 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
     if (errorMessages.length) {
         req.session.errorMessages = errorMessages;
         req.session.body = req.body;
-        return res.redirect(req.baseUrl + '/');
+        return res.redirect(req.baseUrl + '/#container');
     } else {
         req.session.destroy();
     }
