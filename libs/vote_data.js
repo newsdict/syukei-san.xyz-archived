@@ -17,6 +17,20 @@ module.exports = class VoteData {
     }
 
     /**
+     * Sanitize the vote data.
+     * @param {Object} req request
+     */
+    sanitizeData(req) {
+        let sanitizedData = {};
+        for (let key in req.body) {
+            if (typeof(req.body[key]) === 'string') {
+                sanitizedData[key] = req.sanitize(req.body[key]);
+            }
+        }
+        return sanitizedData;
+    }
+
+    /**
      * Sort the vote data.
      * @return {Object}
      */

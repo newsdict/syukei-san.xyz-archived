@@ -52,7 +52,7 @@
         <div class="tile is-parent">
             <div class="tile is-child box">
                 <p class="title"><%= name %> - 集計結果</p>
-                <% for(key in data) { %>
+                <% for(let key in data) { %>
                 <div class="control">
                     <div class="tags has-addons">
                         <span class="tag <%= tagHelper.colorByRanking(key) %> <%= tagHelper.sizeByRanking(key) %>"><%= data[key]['key'] %></span>

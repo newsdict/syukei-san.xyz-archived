@@ -13,10 +13,10 @@ module.exports = class FormHelper {
      * @param {String} name tag name
      */
     getValueInSession(name) {
-        if (!this.req.session.form[name]) {
+        if (!this.req.session.body || (this.req.session.body && !this.req.session.body[name])) {
             return;
         }
-        return this.req.session.form[name];
+        return this.req.session.body[name];
     }
 
     /**
