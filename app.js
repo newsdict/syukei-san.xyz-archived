@@ -68,7 +68,7 @@ app.post('/create', [
     });
     // Log error message to session
     let errorMessages = createErrorMessageInstance.getMessages();
-    if (errorMessages) {
+    if (errorMessages.length) {
         req.session.errorMessages = errorMessages;
         req.session.form = req.body;
         return res.redirect(req.baseUrl + '/');
