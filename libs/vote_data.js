@@ -62,11 +62,45 @@ module.exports = class VoteData {
     }
 
     /**
+     * Set cookie to make one vote only
+     * @param req
+     * @param res
+     * @return {Boolean}
+     */
+    setUniquenessCookie (req, res) {
+        // To make one vote only
+        let cookies = new Array();
+        if (req.cookies.voted) {
+            cookies = req.cookies.voted.concat(this.id);
+        } else {
+            cookies = new Array(this.id);
+        }
+        return res.cookie('voted', cookies, {
+            maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
+            httpOnly:true,
+            secure:true
+        });
+    }
+
+    /**
+     * Check uniqueness vote
+     * @param req
+     */
+    isVoted(req) {
+        if (!req.cookies.voted) return false;
+        let isVoted = req.cookies.voted.find( (id) => {
+            return id == this.id;
+        });
+        return isVoted;
+    }
+
+    /**
      * vote
      * @param {String} key
      * @return void
      */
     vote(key) {
+        // Vote
         let data = this.data();
         if (!data._voteData) {
             data._voteData = [];

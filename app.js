@@ -110,7 +110,9 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
         data: voteDataInstance.data().data,
         title: '集計フォーム - 集計さん',
         description: '',
-        csrfToken: req.csrfToken()
+        //isVoted: req.body.is_voted ? 1 : 0,
+        csrfToken: req.csrfToken(),
+        isVoted: req.query.is_voted ? true : false
     });
 });
 
@@ -119,8 +121,15 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
  */
 app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
     let voteDataInstance = new voteData(req.params.id);
-    // vote {req.body.key}
-    voteDataInstance.vote(req.body.key)
+    // Uniqueness
+    if (voteDataInstance.isVoted(req)) {
+        return res.redirect(req.baseUrl + '/form/' + voteDataInstance.id + '/?is_voted=1');
+    } else {
+        // Set cookie to make one vote only
+        voteDataInstance.setUniquenessCookie(req, res);
+        // vote {req.body.key}
+        voteDataInstance.vote(req.body.key);
+    }
     res.render('result', {
         data: voteDataInstance.sortData(),
         name: voteDataInstance.name(),
