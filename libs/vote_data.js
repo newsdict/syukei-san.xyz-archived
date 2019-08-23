@@ -19,6 +19,7 @@ module.exports = class VoteData {
         } else {
             this.id = this.generateId();
         }
+        this.expire = 90 * 24 * 60 * 60; // Expire 90 days
     }
 
     /**
@@ -92,6 +93,16 @@ module.exports = class VoteData {
             return id == this.id;
         });
         return isVoted;
+    }
+
+    /**
+     * Is expire
+     * @return {boolean}
+     */
+    isExpire() {
+        if (Date.now() - this.expire > this.data().created_at) {
+            return true;
+        }
     }
 
     /**

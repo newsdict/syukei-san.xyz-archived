@@ -3,6 +3,7 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const appRoot = require('app-root-path');
 const session = require('express-session');
 const valueScheme = require('value-schema');
 const cookieParser = require('cookie-parser');
@@ -41,6 +42,7 @@ app.use(expressSanitizer())
 const createErrorMessage = require('./libs/create_error_message.js');
 const voteData = require('./libs/vote_data.js');
 const validationSchemes = require('./libs/shemes');
+const cleanData = require('./libs/clean_data.js');
 const tagHelper = require('./helpers/tag_helper.js');
 const formHelper = require('./helpers/form_helper.js');
 
@@ -48,6 +50,9 @@ const formHelper = require('./helpers/form_helper.js');
  * top page
  */
 app.get('/', csrfProtection, function (req, res) {
+    const cleanDataInstance = new cleanData()
+    // unlink old files
+    cleanDataInstance.clean(path.join(appRoot.path, 'data'));
     res.render('index', {
         title: '集計さん',
         description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるツールです。',
@@ -87,6 +92,8 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
     sanitizedData.data = sanitizedData.data
         .split(/\r?\n/).filter(v => v)
         .filter((elem, index, self) => self.indexOf(elem) === index);
+    // add create_at
+    sanitizedData.created_at =  Date.now();
     // Write to file
     fileSystem.writeFileSync(filePath, JSON.stringify(sanitizedData), function (err) {
         if (err) {
