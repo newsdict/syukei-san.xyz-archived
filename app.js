@@ -1,12 +1,12 @@
-// 'use strict'
+'use strict'
 
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const valueScheme = require('value-schema');
 const cookieParser = require('cookie-parser');
 const fileSystem = require('fs');
-const crypto = require('crypto');
 const csrf = require('csurf');
 const app = express();
 const port = 3000;
@@ -21,11 +21,12 @@ require('dotenv').config();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-// Session
 app.use(session({
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
+    httpOnly: true,
+    secure: true,
     cookie: {
         maxAge: 30 * 60 * 1000
     }
@@ -76,15 +77,10 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
     } else {
         req.session.destroy();
     }
-    // Generate file name;
-    let hrTime = process.hrtime();
-    // Not reuse digest
-    //  ref. https://stackoverflow.com/questions/44855529/using-crypto-node-js-library-unable-to-create-sha-256-hashes-multiple-times-in
-    let sha1Hash = crypto.createHash('sha1').update(hrTime[1] + sanitizedData).digest('hex');
     // Generate dirPath;
-    let dirPath = 'data/' + sha1Hash.slice(0, 2) + '/' + sha1Hash.slice(3, 5);
+    let filePath = voteDataInstance.filePath();
     // Create Dirs
-    fileSystem.mkdirSync(dirPath, {recursive: true}, function (err) {
+    fileSystem.mkdirSync(path.dirname(filePath), {recursive: true}, function (err) {
         // nothing
     });
     // Remove white space, Make data unique
@@ -92,12 +88,12 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
         .split(/\r?\n/).filter(v => v)
         .filter((elem, index, self) => self.indexOf(elem) === index);
     // Write to file
-    fileSystem.writeFileSync(dirPath + '/' + sha1Hash, JSON.stringify(sanitizedData), function (err) {
+    fileSystem.writeFileSync(filePath, JSON.stringify(sanitizedData), function (err) {
         if (err) {
             throw err;
         }
     });
-    return res.redirect(req.baseUrl + '/form/' + sha1Hash + '/');
+    return res.redirect(req.baseUrl + '/form/' + voteDataInstance.id + '/');
 });
 
 /**;
@@ -106,7 +102,7 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
 app.get('/form/:id/', csrfProtection, function (req, res) {
     let voteDataInstance = new voteData(req.params.id);
     // Generate file path
-    let filePath = 'data/' + req.params.id.slice(0, 2) + '/' + req.params.id.slice(3, 5) + '/' + req.params.id;
+    let filePath = voteDataInstance.filePath();
     // Voting data
     const form = JSON.parse(fileSystem.readFileSync(filePath, {encoding: "utf-8"}));
     res.render('form', {

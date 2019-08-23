@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const crypto = require('crypto');
 const fileSystem = require('fs');
 const path = require('path');
 /**
@@ -12,8 +13,12 @@ module.exports = class VoteData {
      * @returns void
      * @constructor
      */
-    constructor (id) {
-        this._id = id;
+    constructor (id = null) {
+        if (id) {
+            this.id = id;
+        } else {
+            this.id = this.generateId();
+        }
     }
 
     /**
@@ -69,7 +74,7 @@ module.exports = class VoteData {
         let targetIndex = data._voteData.findIndex((data) => {
             return data.key === key;
         });
-        if (targetIndex > 0) {
+        if (targetIndex >= 0) {
             data._voteData[targetIndex].count++;
         } else {
             data._voteData.push({
@@ -98,6 +103,19 @@ module.exports = class VoteData {
      * @returns {string}
      */
     filePath() {
-        return path.join(appRoot.path, 'data', this._id.slice(0, 2), this._id.slice(3, 5), this._id);
+        return path.join(appRoot.path, 'data', this.id.slice(0, 2), this.id.slice(3, 5), this.id);
+    }
+
+    /**
+     * Generate id
+     * @return {String} id
+     */
+    generateId() {
+        // Generate file name;
+        let hrTime = process.hrtime();
+        // Not reuse digest
+        //  ref. https://stackoverflow.com/questions/44855529/using-crypto-node-js-library-unable-to-create-sha-256-hashes-multiple-times-in
+        let sha1Hash = crypto.createHash('sha1').update(hrTime[1] + crypto.randomBytes(4)).digest('hex');
+        return sha1Hash;
     }
 }
