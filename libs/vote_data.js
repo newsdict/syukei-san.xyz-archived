@@ -100,13 +100,13 @@ module.exports = class VoteData {
      * @return {boolean}
      */
     isExpire() {
-        if (Date.now() - this.expire > this.data().created_at) {
+        if (Date.now() > this.data().created_at + this.expire) {
             return true;
         }
     }
 
     /**
-     * vote
+     * vote:q
      * @param {String} key
      * @return void
      */

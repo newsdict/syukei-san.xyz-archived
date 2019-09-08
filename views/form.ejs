@@ -61,6 +61,7 @@
                     複数回の投票はできません
                 </div>
                 <% } %>
+                <p class="title"><%= name %> - 投票中</p>
                 <form action="/result/<%= id %>/" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="id" value="<%= csrfToken %>">

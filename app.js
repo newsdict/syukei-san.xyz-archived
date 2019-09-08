@@ -115,6 +115,7 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
     res.render('form', {
         id: req.params.id,
         data: voteDataInstance.data().data,
+        name: voteDataInstance.name(),
         title: '集計フォーム - 集計さん',
         description: '',
         //isVoted: req.body.is_voted ? 1 : 0,
