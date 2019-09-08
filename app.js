@@ -47,6 +47,14 @@ const tagHelper = require('./helpers/tag_helper.js');
 const formHelper = require('./helpers/form_helper.js');
 
 /**;
+ * Health Check
+ */
+app.get('/active', function (req, res) {
+    res.status(200);
+    res.send('ok');
+});
+
+/**;
  * top page
  */
 app.get('/', csrfProtection, function (req, res) {
