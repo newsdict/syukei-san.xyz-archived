@@ -13,7 +13,7 @@ module.exports = class CleanData {
      */
     clean(findPath) {
         fileSystem.readdir(findPath, (err, files) => {
-            files.filter(file => {
+            (files||[]).filter(file => {
                 const stat = fileSystem.statSync(path.join(findPath, file));
                 if (err) {
                     throw err;
