@@ -63,7 +63,7 @@
                 <form action="/create" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="field">
-                        <label class="label">タイトル</label>
+                        <label class="label">1. タイトル</label>
                         <div class="control">
                             <input class="input <%= formHelper.getErrorClass('name') %>" type="text" name="name" placeholder="掃除当番の集計" value="<%= formHelper.getValueInSession('name') %>">
                             <% if (formHelper.isError('name')) { %>
@@ -72,7 +72,13 @@
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label">集計するデータ</label>
+                        <label class="label">2. 集計するデータ</label>
+                        <div class="notification">
+                        例 (行ごとに投票させたい項目を追記します）<br/>
+                        A商品<br/>
+                        B商品<br/>
+                        C商品
+                        </div>
                         <div class="control">
                             <textarea class="textarea <%= formHelper.getErrorClass('data') %>" name="data" placeholder="1行ごとに入れてください"><%= formHelper.getValueInSession('data') %></textarea>
                             <% if (formHelper.isError('data')) { %>
@@ -84,7 +90,7 @@
                         <div class="control">
                             <label class="checkbox">
                                 <input type="checkbox" name="is_agreement">
-                                <a target="_blank" href="/term">利用規約</a>に同意します。
+                                3. <a target="_blank" href="/term">利用規約</a>をお呼びの上ご同意をお願いいたします
                             </label>
                             <% if (formHelper.isError('is_agreement')) { %>
                                 <p class="help is-danger">利用規約にご同意していただく必要があります。※入力エラー時にはもう一度チェックしていただく必要があります。</p>
@@ -128,7 +134,7 @@
                 </a>
             </p>
             <div class="control level-item">
-                <a href="https://github.com/yubele/iten.site">
+                <a href="https://github.com/yubele/syukei-san.xyz">
                     <div class="tags has-addons">
                         <span class="tag is-dark">syukei-san.xyz</span>
                         <span class="tag is-info">MIT license</span>
