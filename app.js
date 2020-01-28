@@ -23,10 +23,11 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.use(session({
+    sameSite: true,
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
-    httpOnly: true,
+    httpOnly: false,
     secure: true,
     cookie: {
         maxAge: 30 * 60 * 1000
