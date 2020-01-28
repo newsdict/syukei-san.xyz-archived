@@ -3,3 +3,6 @@
 
 # dotenv
 /.env
+
+/node_modules
+/data

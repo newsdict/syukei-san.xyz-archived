@@ -24,20 +24,21 @@
   },
   "homepage": "https://github.com/newsdict/syukei-san.xyz#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "ejs": "^2.6.2",
-    "cookie-parser": "^1.4.4",
-    "csurf": "^1.10.0",
-    "body-parser": "^1.19.0",
-    "crypto": "^1.0.1",
-    "sha1": "^1.1.1",
-    "express-validator": "^6.1.1",
     "app-root-path": "^2.2.1",
-    "path": "^0.12.7",
-    "value-schema": "^2.1.0",
-    "express-session": "^1.16.2",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "crypto": "^1.0.1",
+    "csurf": "^1.10.0",
     "dotenv": "^8.1.0",
-    "express-sanitizer": "^1.0.5"
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "express-layout": "^0.1.0",
+    "express-sanitizer": "^1.0.5",
+    "express-session": "^1.16.2",
+    "express-validator": "^6.1.1",
+    "path": "^0.12.7",
+    "sha1": "^1.1.1",
+    "value-schema": "^2.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
