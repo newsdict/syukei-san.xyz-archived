@@ -1,109 +1,23 @@
-<?php /* use https://github.com/dansup/bulma-templates/blob/master/templates/hero.html */ ?><!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title><%= title %> - <%= description %></title>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" rel="stylesheet"/>
-    <meta name="robots" content="noindex">
-</head>
-<body>
-<section class="hero is-info is-medium is-bold">
-    <div class="hero-head">
-        <nav class="navbar">
-            <div class="container">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="/">
-                        <%= title %>
-                    </a>
-                    <span class="navbar-burger burger" data-target="navbarMenu">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
-                </div>
-                <div class="navbar-menu" id="navbarMenu">
-                    <div class="navbar-end">
-                        <div class="tabs is-right">
-                            <ul>
-                                <li><a href="/">Home</a></li>
-                            </ul>
-                            <span class="navbar-item">
-                                <a class="button is-white is-outlined"
-                                   href="https://github.com/newsdict/syukei-san.xyz">
-                                    <span class="icon">
-                                    <i class="fa fa-github"></i>
-                                    </span>
-                                    <span title="Hello from the other side">View Source</span>
-                                </a>
-                            </span>
-                        </div>
-                    </div>
+<div id="container">
+    <div class="tile is-parent">
+        <div class="tile is-child box">
+            <p class="title"><%= name %> - 集計結果</p>
+            <% for(let key in data) { %>
+            <div class="control">
+                <div class="tags has-addons">
+                    <span class="tag <%= tagHelper.colorByRanking(key) %> <%= tagHelper.sizeByRanking(key) %>"><%= data[key]['key'] %></span>
+                    <span class="tag <%= tagHelper.colorByRanking(key) %> <%= tagHelper.sizeByRanking(key) %>"><%= data[key]['count'] %>票</span>
                 </div>
             </div>
-        </nav>
-    </div>
-</section>
-<section id="main">
-    <div id="container">
-        <div class="tile is-parent">
-            <div class="tile is-child box">
-                <p class="title"><%= name %> - 集計結果</p>
-                <% for(let key in data) { %>
-                <div class="control">
-                    <div class="tags has-addons">
-                        <span class="tag <%= tagHelper.colorByRanking(key) %> <%= tagHelper.sizeByRanking(key) %>"><%= data[key]['key'] %></span>
-                        <span class="tag <%= tagHelper.colorByRanking(key) %> <%= tagHelper.sizeByRanking(key) %>"><%= data[key]['count'] %>票</span>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <progress class="progress <%= tagHelper.colorByRanking(key) %>>" value="<%= data[key]['count'] * 10 %>" max="100"></progress>
-                </div>
-                <% } %>
+            <div class="card-content">
+                <progress class="progress <%= tagHelper.colorByRanking(key) %>>" value="<%= data[key]['count'] * 10 %>" max="100"></progress>
             </div>
-        </div>
-        <hr>
-        <div class="has-text-centered">
-            <a class="button is-link" href="/">Back to the Home</a>
-        </div>
-        <hr>
-    </div>
-</section>
-<footer class="footer">
-    <div class="container">
-        <div class="columns">
-            <div class="column is-3 is-offset-2">
-                <h2><strong>Hosting Sites by newsdict</strong></h2>
-                <ul>
-                    <li><a href="https://newsdict.jp/">newsdict</a></li>
-                </ul>
-                <ul>
-                    <li><a href="https://newsdict.blog/">newsdict.blog</a></li>
-                </ul>
-                <ul>
-                    <li><a href="https://syukei-san.xyz">集計さん</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="content has-text-centered">
-            <p>
-                <a class="icon" href="https://github.com/newsdict/syukei-san.xyz">
-                    <i class="fa fa-github"></i>
-                </a>
-            </p>
-            <div class="control level-item">
-                <a href="https://github.com/yubele/iten.site">
-                    <div class="tags has-addons">
-                        <span class="tag is-dark">syukei-san.xyz</span>
-                        <span class="tag is-info">MIT license</span>
-                    </div>
-                </a>
-            </div>
+            <% } %>
         </div>
     </div>
-</footer>
-</body>
-</html>
+    <hr>
+    <div class="has-text-centered">
+        <a class="button is-link" href="/">Back to the Home</a>
+    </div>
+    <hr>
+</div>

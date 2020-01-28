@@ -39,6 +39,12 @@ app.use(cookieParser());
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer())
 
+// express layout
+const layout = require('express-layout');
+app.use(layout());
+app.set('layouts', './views/layouts');
+app.set('layout', 'default');
+
 const createErrorMessage = require('./libs/create_error_message.js');
 const voteData = require('./libs/vote_data.js');
 const validationSchemes = require('./libs/shemes');
@@ -62,8 +68,10 @@ app.get('/', csrfProtection, function (req, res) {
     // unlink old files
     cleanDataInstance.clean(path.join(appRoot.path, 'data'));
     res.render('index', {
+        hero: true,
+        index: true,
         title: '集計さん',
-        description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるツールです。',
+        description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるオープンソースのツールです。',
         csrfToken: req.csrfToken(),
         formHelper: new formHelper(req)
     });

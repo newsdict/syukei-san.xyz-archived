@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+docker-compose stop &&
+docker-compose up -d &&
+docker attach $(docker ps |grep syukei-san$ |cut -f 1 -d" ")

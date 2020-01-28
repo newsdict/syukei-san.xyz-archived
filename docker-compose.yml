@@ -3,7 +3,7 @@ networks:
   app-tier:
     driver: bridge
 services:
-  nodejs-server:
+  web:
     tty: true
     stdin_open: true
     container_name: syukei-san
