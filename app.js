@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const appRoot = require('app-root-path');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 const valueScheme = require('value-schema');
 const cookieParser = require('cookie-parser');
 const fileSystem = require('fs');
@@ -22,21 +22,22 @@ require('dotenv').config();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-app.use(session({
-    sameSite: true,
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false,
-    httpOnly: false,
-    secure: true,
-    cookie: {
-        maxAge: 30 * 60 * 1000
-    }
+app.use(cookieSession({
+    name: 'syukei-san',
+    keys: [process.env.SECRET, process.env.SECRET],
+    maxAge: 30 * 60 * 1000,
+    path: '/'
 }));
 
 // parse cookies
 // we need this because "cookie" is true in csrfProtection
-app.use(cookieParser());
+app.use(cookieParser(
+    process.env.SECRET,
+    {
+        name: 'syukei-san',
+        maxAge: 30 * 60 * 1000,
+        path: '/'
+    }));
 // Mount express-sanitizer middleware here
 app.use(expressSanitizer())
 
@@ -97,7 +98,7 @@ app.post('/create', parseForm, csrfProtection, (req, res) => {
         req.session.body = req.body;
         return res.redirect(req.baseUrl + '/#container');
     } else {
-        req.session.destroy();
+        req.session = null;
     }
     // Generate dirPath;
     let filePath = voteDataInstance.filePath();
