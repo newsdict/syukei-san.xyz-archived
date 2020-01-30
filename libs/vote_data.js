@@ -19,7 +19,7 @@ module.exports = class VoteData {
         } else {
             this.id = this.generateId();
         }
-        this.expire = 90 * 24 * 60 * 60; // Expire 90 days
+        this.expire = 90 * 24 * 60 * 60 * 1000; // Expire 90 days
     }
 
     /**
