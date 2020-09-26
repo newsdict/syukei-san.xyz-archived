@@ -75,6 +75,7 @@ app.get('/', csrfProtection, function (req, res) {
         index: true,
         title: new seo(req).title(),
         description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex(),
         csrfToken: req.csrfToken(),
         formHelper: new formHelper(req)
     });
@@ -137,6 +138,7 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
         name: voteDataInstance.name(),
         title: new seo(req).title(),
         description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex(),
         csrfToken: req.csrfToken(),
         isVoted: req.query.is_voted ? true : false
     });
@@ -161,6 +163,7 @@ app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
         name: voteDataInstance.name(),
         title: new seo(req).title(),
         description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex(),
         tagHelper: new tagHelper()
     });
 });
@@ -175,6 +178,7 @@ app.get('/result/:id/', function (req, res) {
         name: voteDataInstance.name(),
         title: new seo(req).title(),
         description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex(),
         tagHelper: new tagHelper()
     });
 });
@@ -185,7 +189,8 @@ app.get('/result/:id/', function (req, res) {
 app.get('/term', function (req, res) {
     res.render('term', {
         title: new seo(req).title(),
-        description: new seo(req).description()
+        description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex()
     });
 });
 app.listen(port, () => console.log('listening on port 3000!'));

@@ -5,6 +5,9 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
+    <% if (is_noindex) { %>
+    <meta name="robots" content="noindex">
+    <% } %>
     <title><%= title %> - <%= description %></title>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/5.14.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">

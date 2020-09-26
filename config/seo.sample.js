@@ -3,13 +3,16 @@ function Seo(req) {
     this.hash = {
         default: {
           title: '集計さん',
-          description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるオープンソースのツールです。'
+          description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるオープンソースのツールです。',
+          is_noindex: false
         },
         '/form/:id/': {
-            title: '集計フォーム - 集計さん'
+            title: '集計フォーム - 集計さん',
+            is_noindex: true
         },
         '/result/:id/': {
-            title: '集計結果 - 集計さん'
+            title: '集計結果 - 集計さん',
+            is_noindex: true
         },
         '/term': {
             title: '利用規約 - 集計さん'
