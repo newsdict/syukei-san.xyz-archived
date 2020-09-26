@@ -3,6 +3,7 @@
     $ cp views/elements.user/head.sample.ejs views/elements.user/head.ejs
     $ cp views/elements.user/body.sample.ejs views/elements.user/body.ejs
     $ cp config/seo.sample.js cofnig/seo.js
+    $ cp views/landing/index.sample.ejs views/landing/index.ejs
 
 # Start Development
 

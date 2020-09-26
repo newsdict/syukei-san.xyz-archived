@@ -193,4 +193,16 @@ app.get('/term', function (req, res) {
         is_noindex: new seo(req).is_noindex()
     });
 });
+
+/**;
+ * Landing Page
+ */
+app.get('/lp/', function (req, res) {
+    res.render('landing/index', {
+        title: new seo(req).title(),
+        description: new seo(req).description(),
+        is_noindex: new seo(req).is_noindex(),
+        hero: true
+    });
+});
 app.listen(port, () => console.log('listening on port 3000!'));
