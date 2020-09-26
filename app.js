@@ -53,6 +53,7 @@ const validationSchemes = require('./libs/shemes');
 const cleanData = require('./libs/clean_data.js');
 const tagHelper = require('./helpers/tag_helper.js');
 const formHelper = require('./helpers/form_helper.js');
+const seo = require('./config/seo.js');
 
 /**;
  * Health Check
@@ -72,8 +73,8 @@ app.get('/', csrfProtection, function (req, res) {
     res.render('index', {
         hero: true,
         index: true,
-        title: '集計さん',
-        description: '集計さんはURLをメンバーに送るだけで、投票結果を集計できるオープンソースのツールです。',
+        title: new seo(req).title(),
+        description: new seo(req).description(),
         csrfToken: req.csrfToken(),
         formHelper: new formHelper(req)
     });
@@ -134,9 +135,8 @@ app.get('/form/:id/', csrfProtection, function (req, res) {
         id: req.params.id,
         data: voteDataInstance.data().data,
         name: voteDataInstance.name(),
-        title: '集計フォーム - 集計さん',
-        description: '',
-        //isVoted: req.body.is_voted ? 1 : 0,
+        title: new seo(req).title(),
+        description: new seo(req).description(),
         csrfToken: req.csrfToken(),
         isVoted: req.query.is_voted ? true : false
     });
@@ -159,8 +159,8 @@ app.post('/result/:id/', parseForm, csrfProtection, function (req, res) {
     res.render('result', {
         data: voteDataInstance.sortData(),
         name: voteDataInstance.name(),
-        title: '集計結果 - 集計さん',
-        description: '',
+        title: new seo(req).title(),
+        description: new seo(req).description(),
         tagHelper: new tagHelper()
     });
 });
@@ -173,8 +173,8 @@ app.get('/result/:id/', function (req, res) {
     res.render('result', {
         data: voteDataInstance.sortData(),
         name: voteDataInstance.name(),
-        title: '集計結果 - 集計さん',
-        description: '',
+        title: new seo(req).title(),
+        description: new seo(req).description(),
         tagHelper: new tagHelper()
     });
 });
@@ -183,6 +183,9 @@ app.get('/result/:id/', function (req, res) {
  * Term
  */
 app.get('/term', function (req, res) {
-    res.render('term', {title: '利用規約 - 集計さん', description: ''});
+    res.render('term', {
+        title: new seo(req).title(),
+        description: new seo(req).description()
+    });
 });
 app.listen(port, () => console.log('listening on port 3000!'));

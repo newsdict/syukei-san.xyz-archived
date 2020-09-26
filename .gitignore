@@ -7,3 +7,4 @@
 /node_modules
 /data
 /views/elements.user
+/config/seo.js
